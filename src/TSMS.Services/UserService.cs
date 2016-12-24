@@ -6,18 +6,20 @@ using Microsoft.AspNetCore.Identity;
 using TSMS.Entities;
 using TSMS.Service.Interfaces;
 using Microsoft.Extensions.Configuration;
+using TSMS.ViewModels;
+using Microsoft.Extensions.Options;
 
 namespace TSMS.Services
 {
     public class UserService :IUserService
     {
-        private readonly IConfigurationRoot _configuration;
+        private readonly AppSettings _settings;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public UserService(UserManager<ApplicationUser> userManager, IConfigurationRoot configuration)
+        public UserService(UserManager<ApplicationUser> userManager, IOptions<AppSettings> settings)
         {
             _userManager = userManager;
-            _configuration = configuration;
+            _settings = settings.Value;
 
 
         }
@@ -35,7 +37,7 @@ namespace TSMS.Services
                 Note = user.Note,
                 Name = user.EmailAddress,
                 UserName = user.PhoneNumber,
-                PricingId = Convert.ToInt64(_configuration["TSMS-PricingId"])
+                PricingId = _settings.TSMS_PricingId
 
             };
 

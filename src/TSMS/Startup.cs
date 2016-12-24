@@ -14,6 +14,7 @@ using TSMS.ViewModels;
 using TSMS.Services;
 using TSMS.Repositories.Interfaces;
 using TSMS.Repositories;
+using TSMS.Service.Interfaces;
 
 namespace TSMS
 {
@@ -58,6 +59,8 @@ namespace TSMS
 
             // Add application services.
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<IUserService, UserService>();
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
         }

@@ -1,24 +1,30 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-public class CreateUserViewModel
+namespace TSMS.ViewModels
 {
-    [Required]
-    [Display(Name ="Customer Name")]
-    public string Name { get; set; }
+    public class CreateUserViewModel
+    {
+        [Required]
+        [Display(Name = "Customer Name")]
+        public string Name { get; set; }
 
-  [Required]
-    [Display(Name ="Customer Name")]
-    public string Address { get; set; }
+        [Required]
+        [Display(Name = "Address")]
+        public string Address { get; set; }
 
-    [DataType(DataType.MultilineText)]
-    
-    public string Note { get; set; }
+        [DataType(DataType.MultilineText)]
+        [Display(Name = "Optional Note")]
+        public string Note { get; set; }
 
-    [Phone]
-    [DataType(DataType.PhoneNumber)]
-    public string PhoneNumber { get; set; }
+        [Phone]
+        [Required]
+        [DataType(DataType.PhoneNumber)]
+        [Display(Name = "Contact Number")]
+        public string PhoneNumber { get; set; }
 
-    [DataType(DataType.EmailAddress)]
-    [EmailAddress]
-    public string EmailAddress { get; set; }
+        [DataType(DataType.EmailAddress)]
+        [EmailAddress]
+        [Display(Name = "Email Id")]
+        public string EmailAddress { get; set; }
+    }
 }

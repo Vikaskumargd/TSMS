@@ -4,10 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TSMS.ViewModels;
+using TSMS.Service.Interfaces;
+using Microsoft.AspNetCore.Identity;
+
 namespace TSMS.Controllers
 {
     public class AdminController : Controller
     {
+        private IUserService _userService;
+
+        public AdminController(IUserService userService)
+        {
+            _userService = userService;
+        }
         // GET: Admin
         public ActionResult Index()
         {
@@ -23,24 +33,30 @@ namespace TSMS.Controllers
         // GET: Admin/CreateCustomer
         public IActionResult CreateCustomer()
         {
+
             return View();
         }
 
-        // POST: Admin/Create
+        // POST: Admin/CreateCustomer
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> CreateCustomer(CreateUserViewModel newCustomerModel)
         {
-            try
+             
+           if(ModelState.IsValid)
             {
-                // TODO: Add insert logic here
+              IdentityResult result =  await _userService.CreateUser(newCustomerModel);
+                if(result.Succeeded)
+                {
+                    return RedirectToAction("Index");
+                }
+                AddErrors(result);
+              
+            }
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
+            
                 return View();
-            }
+            
         }
 
         // GET: Admin/Edit/5
@@ -88,5 +104,17 @@ namespace TSMS.Controllers
                 return View();
             }
         }
+
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+        }
+
+
+
     }
 }
